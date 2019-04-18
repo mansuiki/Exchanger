@@ -215,6 +215,24 @@ def trans_Detect_Language(targettext):
 def bitcoin():
     print("bitcoin")
 
+    url = "https://blockchain.info/ticker"
+    request = urllib.request.Request(url)
+    response = urllib.request.urlopen(request)
+    rescode = response.getcode()
+    if rescode == 200:
+        response_body = response.read()
+        bitdata = json.loads(response_body)
+        print(bitdata['KRW'])
+        # {'15m': 5881078.13, 'last': 5881078.13, 'buy': 5881078.13, 'sell': 5881078.13, 'symbol': '₩'}
+        '''
+        손익률 계산
+            -> 국밥 계산 + 최저임금 계산
+        얼마야?
+        '''
+
+    else:
+        print("ERROR" + rescode)
+
 
 def enigma():
     print("enigma")
