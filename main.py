@@ -38,10 +38,6 @@ def start_menu(i):
         enigma()
         return 0
 
-    elif i == '4':
-        today_luck()
-        return 0
-
     else:
         print("\n다시한번 숫자만 입력해주세요. \n\n")
         return 1
@@ -278,10 +274,6 @@ def enigma():
     print("enigma")
 
 
-def today_luck():
-    print("today_luck")
-
-
 t = 0.1  # 원래는 0.5
 
 time.sleep(t)
@@ -319,7 +311,6 @@ while retry == 1:
                 "1. 번역 - 구현 끝\n"
                 "2. 비트코인 환율 - 구현 끝\n"
                 "3. 에니그마 - 구현 중\n"
-                "4. 오늘의 운 - 구현 예정\n"
                 "원하는 메뉴를 선택하세요. : ")
 
     retry = start_menu(sel)
