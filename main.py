@@ -1,9 +1,8 @@
 import time
-import urllib
+import urllib.request
 import json
 import os
 import sys
-
 
 '''
 ---------------------------------------------------------------------------
@@ -49,7 +48,7 @@ def start_menu(i):
 
 
 def trans():
-    print("PapagoNMT(신경망 번역) API를 사용한 번역 기능입니다.")
+    print("\n\nPapagoNMT(신경망 번역) API를 사용한 번역 기능입니다.")
     print("1. 외국어를 한국어로")
     print("2. 한국어를 외국어로")
     transel = input("\n원하는 기능의 숫자를 입력해주세요 : ")
@@ -213,7 +212,26 @@ def trans_Detect_Language(targettext):
 
 
 def bitcoin():
-    print("bitcoin")
+    bitdata = bitcoin_getdata()
+
+    print("\n\n현재 1 비트코인은", bitdata['15m'], "원 입니다.\n\n")
+
+    print("1. 손익률 계산")
+    print("2. 예상 비트코인 구입 가능량")
+    bitsel = input("원하시는 메뉴를 선택해 주세요 : ")
+
+    if bitsel == '1':
+        blackcow = float(input("\n비트코인을 구입했던 시세를 입력해주세요 : "))
+        coin = float(input("구입한 비트코인의 양을 입력해주세요 : "))
+        bitcoin_cal(blackcow, coin, float(bitdata['15m']))
+
+    elif bitsel == '2':
+        howmany = float(input("\n현재 얼마가 있으신가요 : "))
+        bitcoin_buy(float(bitdata['15m']), howmany)
+
+
+def bitcoin_getdata():
+    # print("bitcoin_getdata")
 
     url = "https://blockchain.info/ticker"
     request = urllib.request.Request(url)
@@ -222,16 +240,38 @@ def bitcoin():
     if rescode == 200:
         response_body = response.read()
         bitdata = json.loads(response_body)
-        print(bitdata['KRW'])
-        # {'15m': 5881078.13, 'last': 5881078.13, 'buy': 5881078.13, 'sell': 5881078.13, 'symbol': '₩'}
-        '''
-        손익률 계산
-            -> 국밥 계산 + 최저임금 계산
-        얼마야?
-        '''
+
+        return bitdata['KRW']
 
     else:
         print("ERROR" + rescode)
+
+
+def bitcoin_cal(blackcow, coin, now):
+    print("\n\n현재와 과거의 시세 차이는 %.2f원 입니다." % (now - blackcow))
+    plormi = (now / blackcow * 100) - 100
+    plormi_money = (now * coin) - (blackcow * coin)
+
+    if plormi < 0:
+        print("%.1f%%의 손해를 보셨습니다." % -plormi)
+        print("%.1f원을 잃으셨습니다.\n" % -plormi_money)
+        time.sleep(2)
+        print("이는 6000원 국밥 %.0f그릇을 먹을 수 있는 돈입니다." % -(plormi_money / 6000))
+        print("또한 최저시급 8350원을 받을 때 %.0f시간 만큼 일해야 받을 수 있는 돈입니다." % -(plormi_money / 8350))
+
+    elif plormi > 0:
+        print("%.1f%%의 이득을 보셨습니다." % plormi)
+        print("%.1f원을 얻으셨습니다.\n" % plormi_money)
+        time.sleep(2)
+        print("존버하지마시고 어서 비트코인을 파세요.")
+
+    elif plormi == 0:
+        print("본전은 건지셨네요.")
+
+
+def bitcoin_buy(now, howmany):
+    print("\n\n현재 비트코인 시세는 약 %.0f원 입니다." % now)
+    print("%.0f원으로 구입할 수 있는 비트코인 양은 약 %.4f개 입니다." % (howmany, howmany / now))
 
 
 def enigma():
@@ -276,9 +316,9 @@ retry = 1
 
 while retry == 1:
     sel = input("\n"
-                "1. 번역 - 구현 중\n"
-                "2. 비트코인 환율 - 구현 예정\n"
-                "3. 에니그마 - 구현 예정\n"
+                "1. 번역 - 구현 끝\n"
+                "2. 비트코인 환율 - 구현 끝\n"
+                "3. 에니그마 - 구현 중\n"
                 "4. 오늘의 운 - 구현 예정\n"
                 "원하는 메뉴를 선택하세요. : ")
 
