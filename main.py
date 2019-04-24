@@ -453,8 +453,8 @@ def enigma_enc(Rotor1, Rotor2, Rotor3, Reflector, Default, origin, ende):
                     refle.setdefault(alphabet[a], Reflector[a])
 
     for i in range(0, len(origin), 1):
-        if origin[i] == " ":
-            encorigin.append(' ')
+        if origin[i] not in Default:
+            encorigin.append(origin[i])
         else:
             enc = origin[i]
 
@@ -472,7 +472,7 @@ def enigma_enc(Rotor1, Rotor2, Rotor3, Reflector, Default, origin, ende):
     return encstr
 
 
-t = 0.5  # 원래는 0.5
+t = 0.0  # 원래는 0.5
 
 time.sleep(t)
 print("---------------------------------------------------------------------------")
