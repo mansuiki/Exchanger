@@ -19,7 +19,13 @@ import sys
                                             ##                             
                                          ####                              
 
----------------------------------------------------------------------------                                         
+---------------------------------------------------------------------------  
+
+----- 참고 사이트 -----
+네이버 API : https://developers.naver.com/main/
+비트코인 데이터 : https://blockchain.info/
+에니그마 작동원리 : http://enigma.louisedade.co.uk/howitworks.html
+에니그마 세부사항 : https://en.wikipedia.org/wiki/Enigma_rotor_details                                       
 '''
 
 client_id = "***REMOVED***"  # 개발자센터에서 발급받은 Client ID 값

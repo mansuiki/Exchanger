@@ -15,8 +15,14 @@
 5. 주석으로 설명 추가 [진행 완료]
 6. commit 개인정보 삭제 [진행 중]
 
-시작!
+> Python Ver : 3.7.2
 
+------------------------
+#### 참고사이트
+* 네이버 API : https://developers.naver.com/main/
+* 비트코인 데이터 : https://blockchain.info/
+* 에니그마 작동원리 : http://enigma.louisedade.co.uk/howitworks.html
+* 에니그마 세부사항 : https://en.wikipedia.org/wiki/Enigma_rotor_details 
 
 ----------
 ----------
