@@ -291,21 +291,21 @@ def enigma():
     if enisel == '1':
         origin = input("\n\n암호화를 원하는 영어 단어나 문장을 입력하세요\n입력형식 : 'ORANGE', 'I LIKE APPLE'\n입력 : ")
 
-        SelRotor1 = random.randrange(0, 7)
+        SelRotor1 = random.randrange(0, 7) # 첫번째 로터 무작위 추출
 
-        SelRotor2 = random.randrange(0, 7)
+        SelRotor2 = random.randrange(0, 7) # 두번째 로터 무작위 추출
 
-        while SelRotor2 == SelRotor1:
-            SelRotor2 = random.randrange(0, 7)
+        while SelRotor2 == SelRotor1: # 만약 첫번째와 두번째가 같다면
+            SelRotor2 = random.randrange(0, 7) # 다시추출
 
-        SelRotor3 = random.randrange(0, 7)
+        SelRotor3 = random.randrange(0, 7) # 세번째 로터 무작위 추출
 
-        while ((SelRotor3 == SelRotor1) or (SelRotor3 == SelRotor2)):
-            SelRotor3 = random.randrange(0, 7)
+        while ((SelRotor3 == SelRotor1) or (SelRotor3 == SelRotor2)): # 둘중 하나라도 같다면
+            SelRotor3 = random.randrange(0, 7) # 다시추출
 
-        SelReflector = random.randrange(0, 2)
+        SelReflector = random.randrange(0, 2) # 리플렉터 추출
 
-        if SelReflector == 0:
+        if SelReflector == 0: # 숫자는 보기 힘드니 영어로 출력 해주자
             ASelReflector = 'A'
 
         elif SelReflector == 1:
@@ -322,7 +322,11 @@ def enigma():
         print("이 값을 기록해 주세요.")
         input("기록하셨다면 아무키를 눌러 주세요.")
 
-        enc = enigma_enc(Rotor[SelRotor1], Rotor[SelRotor2], Rotor[SelRotor3], Reflector[SelReflector], Default, origin)
+        Rotor1 = [Rotor[SelRotor1], 1]
+        Rotor2 = [Rotor[SelRotor2], 2]
+        Rotor3 = [Rotor[SelRotor3], 3]
+
+        enc = enigma_enc(Rotor1, Rotor2, Rotor3, Reflector[SelReflector], Default, origin, 0)
 
         print("\n\n암호화된 '%s' 는 '%s' 입니다." % (origin, enc))
 
@@ -348,81 +352,127 @@ def enigma():
             print("ERROR")
             exit(0)
 
-        dec = enigma_enc(Rotor[SelRotor1], Rotor[SelRotor2], Rotor[SelRotor3], Reflector[SelReflector], Default, origin)
+        Rotor1 = [Rotor[SelRotor1], 1]
+        Rotor2 = [Rotor[SelRotor2], 2]
+        Rotor3 = [Rotor[SelRotor3], 3]
+
+        dec = enigma_enc(Rotor1, Rotor2, Rotor3, Reflector[SelReflector], Default, origin, 1)
 
         print("\n\n복호화된 '%s' 는 '%s' 입니다." % (origin, dec))
 
 
-def enigma_enc(Rotor1, Rotor2, Rotor3, Reflector, Default, origin):
+def enigma_enc(Rotor1, Rotor2, Rotor3, Reflector, Default, origin, ende):
+
     origin = origin.upper()  # 대문자로 변환
+
     encorigin = []  # 암호화된 값을 받기 위한 리스트
 
-    list1 = list(Rotor1)  # 로터가 돌아가는것을 구현하기 위한 리스트 변환
-    list2 = list(Rotor2)
-    list3 = list(Rotor3)
+    list1 = list(Rotor1[0])  # 치환을 하기위해서 리스트 먼저 대입
+    list2 = list(Rotor2[0])
+    list3 = list(Rotor3[0])
 
-    a = 0  # 로터가 돌아가는것을 구현하기 위한 변수
-    b = 0
-    c = 0
+    rot1 = Rotor1[1] # 돌아가는 횟수
+    rot2 = Rotor2[1]
+    rot3 = Rotor3[1]
+
+    dict1 = {} # 치환값을 담을 딕셔너너리
+    dict2 = {}
+    dict3 = {}
+    refle = {}
+
+    if ende == 0:
+        for i in range(0, 4, 1):
+            alphabet = list(Default)
+            z = 0
+
+            for a in range(len(Default)):
+                if i == 0:
+                    if z == 0:
+                        for b in range(rot1):
+                            alphabet.append(alphabet[0]) # 기본 알파벳 순서를 rot값에 따라서 돌림
+                            del alphabet[0]
+                        z = 1
+
+                    dict1.setdefault(list1[a], alphabet[a]) # 치환 딕셔너리 작성
+
+                elif i == 1:
+                    if z == 0:
+                        for b in range(rot2):
+                            alphabet.append(alphabet[0])
+                            del alphabet[0]
+                        z = 1
+
+                    dict2.setdefault(list2[a], alphabet[a])
+
+                elif i == 2:
+                    if z == 0:
+                        for b in range(rot3):
+                            alphabet.append(alphabet[a])
+                            del alphabet[0]
+                        z = 1
+
+                    dict3.setdefault(list3[a], alphabet[a])
+
+                elif i == 3:
+                    refle.setdefault(Reflector[a], alphabet[a])
+
+    else:
+        for i in range(0, 4, 1):
+            alphabet = list(Default)
+            z = 0
+
+            for a in range(len(Default)):
+                if i == 0:
+                    if z == 0:
+                        for b in range(rot1):
+                            alphabet.append(alphabet[0]) # 기본 알파벳 순서를 rot값에 따라서 돌림
+                            del alphabet[0]
+                        z = 1
+
+                    dict1.setdefault(alphabet[a], list1[a]) # 치환 딕셔너리 작성
+
+                elif i == 1:
+                    if z == 0:
+                        for b in range(rot2):
+                            alphabet.append(alphabet[0])
+                            del alphabet[0]
+                        z = 1
+
+                    dict2.setdefault(alphabet[a], list2[a])
+
+                elif i == 2:
+                    if z == 0:
+                        for b in range(rot3):
+                            alphabet.append(alphabet[a])
+                            del alphabet[0]
+                        z = 1
+
+                    dict3.setdefault(alphabet[a], list3[a])
+
+                elif i == 3:
+                    refle.setdefault(alphabet[a], Reflector[a])
 
     for i in range(0, len(origin), 1):
-
-        if origin[i] == ' ':
+        if origin[i] == " ":
             encorigin.append(' ')
-
         else:
-            enc = origin[i]  # 암호화할 문자열에서 순서대로 한 문자씩 추출 Z
+            enc = origin[i]
 
-            numenc = Default.find(enc)  # 그 문자가 몇 번째에 있는지 확인
-            enc = Rotor3[numenc]  # 3번째 로터부터 문자 변환 E
-
-
-            numenc = Rotor2.find(enc)  # 다시 변환된 문자가 몇 번째에 있는지 확인
-
-            enc = Default[numenc]  # 2번째 로터로 다시 변환
-            numenc = Rotor1.find(enc)  # 다시 확인
-
-            enc = Reflector[numenc]  # 반사판에 들어가 대칭쌍중에서 변환 J -> F
-
-            numenc = Rotor1.find(enc)  # 변환 문자가 몇 번째인지 확인
-            enc = Default[numenc]  # 1번째 로터부터 문자 변환
-
-            numenc = Rotor2.find(enc)  # 다시 변환된 문자가 몇 번째에 있는지 확인
-
-            enc = Rotor2[numenc]  # 2번째 로터로 다시 변환
-
-            numenc = Default.find(enc)  # 다시 확인
-
-            enc = Rotor3[numenc]  # 3번째 로터로 다시 변환
-
-            numenc = Default.find(enc)  # 다시 확인
-
-            encorigin.append(Default[numenc])
-
-        list1.append(list1[0])
-        del list1[0]
-        Rotor1 = ''.join(list1)
-
-        if b != (a // 26):
-            list2.append(list2[0])
-            del list2[0]
-            Rotor2 = ''.join(list2)
-            b = a
-
-        if c != (a // (26 * 26)):
-            list3.append(list3[0])
-            del list3[0]
-            Rotor3 = ''.join(list3)
-            c = a
-
-        a = a + 1
+            enc = dict1[enc]
+            enc = dict2[enc]
+            enc = dict3[enc]
+            enc = refle[enc]
+            enc = dict3[enc]
+            enc = dict2[enc]
+            enc = dict1[enc]
+            encorigin.append(enc)
 
     encstr = ''.join(encorigin)
 
     return encstr
 
 
-t = 0.1  # 원래는 0.5
+t = 0.5  # 원래는 0.5
 
 time.sleep(t)
 print("---------------------------------------------------------------------------")
@@ -454,11 +504,11 @@ time.sleep(t)
 
 retry = 1
 
-while retry == 1:
+while retry == 1: # 메뉴 선택 부분
     sel = input("\n"
                 "1. 번역 - 구현 끝\n"
                 "2. 비트코인 환율 - 구현 끝\n"
-                "3. 에니그마 - 구현 중\n"
+                "3. 에니그마 - 구현 끝\n"
                 "원하는 메뉴를 선택하세요. : ")
 
-    retry = start_menu(sel)
+    retry = start_menu(sel) # 함수 실행후 리턴값이 계속 1이라면 반복
