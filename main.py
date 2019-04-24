@@ -28,8 +28,8 @@ import sys
 에니그마 세부사항 : https://en.wikipedia.org/wiki/Enigma_rotor_details                                       
 '''
 
-client_id = "***REMOVED***"  # 개발자센터에서 발급받은 Client ID 값
-client_secret = "***REMOVED***"  # 개발자센터에서 발급받은 Client Secret 값
+client_id = "example_id"  # 개발자센터에서 발급받은 Client ID 값
+client_secret = "example_secret"  # 개발자센터에서 발급받은 Client Secret 값
 
 
 def start_menu(i):
